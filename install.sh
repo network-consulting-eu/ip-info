@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# IP Information Tools Installer for Zorin OS
-# This script installs the IP taskbar indicator and IP information dialog
+# Network Information Tools Installer for Zorin OS
+# This script installs IP tools and network quality monitor
 
-echo "Installing IP Information Tools..."
+echo "Installing Network Information Tools..."
 
 # Check if running as root
 if [ "$EUID" -ne 0 ]; then
@@ -27,9 +27,10 @@ fi
 
 # Copy the scripts to /usr/local/bin
 echo "Installing scripts..."
-chmod +x ip-taskbar.py show-ip.sh
+chmod +x ip-taskbar.py show-ip.sh network-quality.py
 cp ip-taskbar.py /usr/local/bin/
 cp show-ip.sh /usr/local/bin/
+cp network-quality.py /usr/local/bin/
 
 # Create desktop entries
 echo "Creating desktop entries..."
@@ -49,7 +50,7 @@ StartupNotify=false
 X-GNOME-Autostart-enabled=true
 EOF
 
-# Create application menu entry for the dialog
+# Create application menu entry for the IP dialog
 mkdir -p $REAL_HOME/.local/share/applications
 cat > $REAL_HOME/.local/share/applications/show-ip.desktop << EOF
 [Desktop Entry]
@@ -62,20 +63,33 @@ Terminal=false
 Categories=Network;System;
 EOF
 
+# Create application menu entry for the Network Quality Monitor
+cat > $REAL_HOME/.local/share/applications/network-quality.desktop << EOF
+[Desktop Entry]
+Type=Application
+Name=Network Quality Monitor
+Comment=Monitors network latency and jitter
+Exec=/usr/local/bin/network-quality.py
+Icon=network-wireless
+Terminal=false
+Categories=Network;System;
+EOF
+
 # Fix permissions
 chown -R $REAL_USER:$REAL_USER $REAL_HOME/.config/autostart/ip-taskbar.desktop
 chown -R $REAL_USER:$REAL_USER $REAL_HOME/.local/share/applications/show-ip.desktop
+chown -R $REAL_USER:$REAL_USER $REAL_HOME/.local/share/applications/network-quality.desktop
 
 echo "Starting IP taskbar indicator..."
 sudo -u $REAL_USER /usr/local/bin/ip-taskbar.py &
 
 echo "Installation complete!"
 echo "The IP taskbar indicator is now running in your system tray."
-echo "You can also find 'IP Address Viewer' in your applications menu."
+echo "You can also find 'IP Address Viewer' and 'Network Quality Monitor' in your applications menu."
 echo ""
-echo "To set up a keyboard shortcut (optional):"
+echo "To set up keyboard shortcuts (optional):"
 echo "1. Go to Settings → Keyboard → Shortcuts → Custom Shortcuts"
 echo "2. Click the '+' button"
-echo "3. Name: IP Address Viewer"
-echo "4. Command: show-ip.sh"
-echo "5. Click 'Set Shortcut' and press your desired key combination (e.g., Ctrl+Alt+I)"
+echo "3. For IP viewer: Name: IP Address Viewer, Command: show-ip.sh"
+echo "4. For Network monitor: Name: Network Quality Monitor, Command: network-quality.py"
+echo "5. Click 'Set Shortcut' and press your desired key combination"
