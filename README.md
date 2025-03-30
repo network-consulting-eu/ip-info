@@ -1,11 +1,25 @@
-# IP Information Tools for Zorin OS
+# Network Information Tools for Zorin OS
 
-This repository contains two useful scripts for displaying IP address information on Zorin OS (and other Ubuntu-based distributions):
+This repository contains useful tools for displaying network information on Zorin OS (and other Ubuntu-based distributions):
 
 1. **ip-taskbar.py** - A persistent system tray indicator that displays both local and public IP addresses
 2. **show-ip.sh** - A lightweight dialog that can be triggered via keyboard shortcut to show IP information on demand
+3. **network-quality.py** - A standalone application that monitors and displays network latency and jitter
 
-Both tools show your public IP address along with all local network interface IPs, making them ideal for system administrators, network troubleshooters, or anyone who needs to quickly check their connection details.
+## Tools Description
+
+### IP Address Tools
+The IP tools show your public IP address along with all local network interface IPs, making them ideal for system administrators, network troubleshooters, or anyone who needs to quickly check their connection details.
+
+### Network Quality Monitor
+The network quality monitor displays:
+- Connection type (WiFi/Ethernet)
+- Quality rating (Excellent, Very Good, Good, etc.)
+- Current latency and jitter values
+- Target server (defaulting to 8.8.8.8)
+- Last update time
+
+It includes auto-update functionality and allows you to change the target server for testing different connections.
 
 ## Requirements
 
@@ -28,7 +42,7 @@ sudo apt install python3-gi gir1.2-ayatanaappindicator3-0.1 curl zenity
 2. Run the installer script:
    ```bash
    chmod +x install.sh
-   ./install.sh
+   sudo ./install.sh
    ```
 
 ### Manual Installation
@@ -46,9 +60,8 @@ sudo apt install python3-gi gir1.2-ayatanaappindicator3-0.1 curl zenity
 
 3. Copy the scripts to a location in your PATH:
    ```bash
-   chmod +x ip-taskbar.py show-ip.sh
-   sudo cp ip-taskbar.py /usr/local/bin/
-   sudo cp show-ip.sh /usr/local/bin/
+   chmod +x ip-taskbar.py show-ip.sh network-quality.py
+   sudo cp ip-taskbar.py show-ip.sh network-quality.py /usr/local/bin/
    ```
 
 4. Create a desktop entry for autostart:
@@ -68,9 +81,11 @@ sudo apt install python3-gi gir1.2-ayatanaappindicator3-0.1 curl zenity
    EOF
    ```
 
-5. Create a desktop entry for the application menu:
+5. Create desktop entries for the application menu:
    ```bash
    mkdir -p ~/.local/share/applications
+   
+   # IP Address Viewer
    cat > ~/.local/share/applications/show-ip.desktop << EOF
    [Desktop Entry]
    Type=Application
@@ -78,6 +93,18 @@ sudo apt install python3-gi gir1.2-ayatanaappindicator3-0.1 curl zenity
    Comment=Shows local and public IP addresses
    Exec=/usr/local/bin/show-ip.sh
    Icon=network-workgroup
+   Terminal=false
+   Categories=Network;System;
+   EOF
+   
+   # Network Quality Monitor
+   cat > ~/.local/share/applications/network-quality.desktop << EOF
+   [Desktop Entry]
+   Type=Application
+   Name=Network Quality Monitor
+   Comment=Monitors network latency and jitter
+   Exec=/usr/local/bin/network-quality.py
+   Icon=network-wireless
    Terminal=false
    Categories=Network;System;
    EOF
@@ -116,6 +143,23 @@ You can launch the IP address dialog in several ways:
    - Command: show-ip.sh
    - Click "Set Shortcut" and press your desired key combination (e.g., Ctrl+Alt+I)
 
+### Network Quality Monitor
+
+The Network Quality Monitor is a standalone application that shows detailed information about your network connection quality:
+
+1. From the application menu: Look for "Network Quality Monitor" in your applications
+2. From the command line:
+   ```bash
+   network-quality.py
+   ```
+
+The application allows you to:
+- View real-time latency and jitter values
+- See a quality rating based on these values
+- Change the target server for testing
+- Toggle automatic updates
+- Refresh the data manually
+
 ## Troubleshooting
 
 If the taskbar indicator doesn't appear:
@@ -145,6 +189,18 @@ If the dialog doesn't appear:
 2. Check if curl can access the internet:
    ```bash
    curl https://ifconfig.me
+   ```
+
+If the Network Quality Monitor doesn't work:
+
+1. Run it from the terminal to see any error messages:
+   ```bash
+   network-quality.py
+   ```
+
+2. Verify you can ping the target server:
+   ```bash
+   ping -c 5 8.8.8.8
    ```
 
 ## Contributing
