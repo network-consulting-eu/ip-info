@@ -10,7 +10,7 @@ from gi.repository import Gtk, GLib
 class NetworkInfoWindow:
     def __init__(self):
         # Configuration parameters
-        self.ping_target = "8.8.8.8"  # Google's DNS server
+        self.ping_target = "9.9.9.9"  # Default target
         self.ping_count = 10  # Number of pings to average
         self.update_interval = 10  # Update every 10 seconds
         
