@@ -22,7 +22,7 @@ sudo apt install python3-gi gir1.2-ayatanaappindicator3-0.1 curl zenity
 1. Clone this repository:
    ```bash
    git clone https://github.com/network-consulting-eu/ip-info.git
-   cd ip-info-tools
+   cd ip-info
    ```
 
 2. Run the installer script:
@@ -36,7 +36,7 @@ sudo apt install python3-gi gir1.2-ayatanaappindicator3-0.1 curl zenity
 1. Clone this repository:
    ```bash
    git clone https://github.com/network-consulting-eu/ip-info.git
-   cd ip-info-tools
+   cd ip-info
    ```
 
 2. Install dependencies:
